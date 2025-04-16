@@ -1,0 +1,915 @@
+openapi: 3.1.0
+info:
+  title: WebAppSDK_EpsonColorWorks
+  version: '1.2'
+  summary: Web Application SDK for Epson ColorWorks
+  description: Web Application SDK for Epson ColorWorks.
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /api/v1/printers/list:
+    get:
+      summary: Printer queue list
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrinterList'
+              examples:
+                example-1:
+                  value:
+                    - Epson FoobarQueue
+      operationId: get-api-v1-printers-list
+      description: Retrieve printer queue list.
+  '/api/v1/printers/{queueName}/print/capability':
+    parameters:
+      - schema:
+          type: string
+        name: queueName
+        in: path
+        required: true
+        description: Printer queue name.
+    get:
+      summary: Print capability
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrintCapability'
+              examples:
+                example-1:
+                  value:
+                    - name: MediaSaving
+                      type: string
+                      capabilitytype: array
+                      current: NoSaving
+                      values:
+                        - NoSaving
+                        - SaveBottom
+                        - SaveTopBottom
+                    - name: Collate
+                      type: boolean
+                      capabilitytype: boolean
+                      current: true
+                    - name: CutInterval
+                      type: num
+                      capabilitytype: range
+                      current: '1'
+                      max: 100
+                      min: 1
+                      step: 1
+      operationId: get-api-v1-printers-queueName-capability
+      parameters: []
+      description: Retrieve the specified printer's printing capability.
+  '/api/v1/printers/{queueName}/print/setting':
+    parameters:
+      - schema:
+          type: string
+        name: queueName
+        in: path
+        required: true
+        description: Printer queue name.
+    post:
+      summary: Print setting
+      tags: []
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrintCapability'
+              examples:
+                example-1:
+                  value:
+                    - name: MediaSaving
+                      type: string
+                      capabilitytype: array
+                      current: NoSaving
+                      values:
+                        - NoSaving
+                        - SaveBottom
+                        - SaveTopBottom
+                    - name: Collate
+                      type: boolean
+                      capabilitytype: boolean
+                      current: true
+                    - name: CutInterval
+                      type: num
+                      capabilitytype: range
+                      current: '1'
+                      max: 100
+                      min: 1
+                      step: 1
+      operationId: post-api-v1-printers-queueName-print-setting
+      description: Send print setting.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrintSetting'
+            examples:
+              example-1:
+                value:
+                  PageSize: 108x174.8mm
+                  MediaSaving: NoSaving
+                  MediaType: PlainPaper
+                  Collate: true
+                  ActionMode: PeelerManualMode
+                  CutInterval: 0
+                  PrintQuality: Normal
+                  Pause: None
+                  ColorAdjustment: High
+                  InkProfile: 0
+                  Brightness: 0
+                  Contrast: 0
+                  Saturation: 0
+                  Cyan: 0
+                  Magenta: 0
+                  Yellow: 0
+                  BiDirection: 'On'
+                  BlackRatio: 0
+                  DryingTime: 0
+              example-pagesize-custom:
+                value:
+                  PageSize:
+                    CustomWidth: 100
+                    CustomHeight: 100
+                  MediaSaving: NoSaving
+                  MediaType: PlainPaper
+                  Collate: true
+                  ActionMode: PeelerManualMode
+                  CutInterval: 0
+                  PrintQuality: Normal
+                  Pause: None
+                  ColorAdjustment: High
+                  InkProfile: 0
+                  Brightness: 0
+                  Contrast: 0
+                  Saturation: 0
+                  Cyan: 0
+                  Magenta: 0
+                  Yellow: 0
+                  BiDirection: 'On'
+                  BlackRatio: 0
+                  DryingTime: 0
+        description: Print setting.
+  '/api/v1/printers/{queueName}/print':
+    parameters:
+      - schema:
+          type: string
+        name: queueName
+        in: path
+        required: true
+        description: Printer queue name.
+    post:
+      summary: Print document
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrintJob'
+              examples:
+                example-1:
+                  value:
+                    res:
+                      - request id is TestQueue-1 (1 file(s))
+      operationId: post-api-v1-printers-list-queueName-print
+      description: Do Print.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mime-type:
+                  type: string
+                  example: application/pdf
+                  description: Data's mime-type.
+                image:
+                  type: string
+                  description: Data to be printed in base64 encoded string.
+                  example: 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81wwMDAxXDAwMDBcMDAwLlwwMDAxXDAwMDVcMDAwLlwwMDA3/1wwMTAw0zDrMMlcMDAwMVwwMDA5XDAwMEhcMDAwNVwwMDAyXDAwMDT/XDAxMVwwMDAgXDAwMFFcMDAwdVwwMDBhXDAwMHJcMDAwdFwwMDB6XDAwMCBcMDAwUFwwMDBEXDAwMEZcMDAwQ1wwMDBvXDAwMG5cMDAwdFwwMDBlXDAwMHhcMDAwdCkKL0F1dGhvciAoZXBzb24pIC9DcmVhdG9yICj+/zDGMK0wuTDIMKgwxzCjMMMwyCkgL0NyZWF0aW9uRGF0ZSAoRDoyMDIxMDcyOTA4MDU1N1owMCcwMCcpCi9Nb2REYXRlIChEOjIwMjEwNzI5MDgwNTU3WjAwJzAwJykgPj4KZW5kb2JqCnhyZWYKMCAyMAowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMTE2MTIgMDAwMDAgbiAKMDAwMDAwMDI5MiAwMDAwMCBuIAowMDAwMDA2OTU3IDAwMDAwIG4gCjAwMDAwMDAwMjIgMDAwMDAgbiAKMDAwMDAwMDI3MyAwMDAwMCBuIAowMDAwMDAwNDAxIDAwMDAwIG4gCjAwMDAwMDY5MjEgMDAwMDAgbiAKMDAwMDAwNDE0OSAwMDAwMCBuIAowMDAwMDA3MDk1IDAwMDAwIG4gCjAwMDAwMDA1NTAgMDAwMDAgbiAKMDAwMDAwMDYwMyAwMDAwMCBuIAowMDAwMDAwNjU3IDAwMDAwIG4gCjAwMDAwMDQxMjggMDAwMDAgbiAKMDAwMDAwNDE4NSAwMDAwMCBuIAowMDAwMDA2OTAwIDAwMDAwIG4gCjAwMDAwMDcwNDUgMDAwMDAgbiAKMDAwMDAwNzM0MCAwMDAwMCBuIAowMDAwMDA3NTkwIDAwMDAwIG4gCjAwMDAwMTE1OTEgMDAwMDAgbiAKdHJhaWxlcgo8PCAvU2l6ZSAyMCAvUm9vdCAxNiAwIFIgL0luZm8gMSAwIFIgL0lEIFsgPDkxODgyODQ5OTdmNDBiYzg1MGJmYTQ4NjcxMjY3YTVmPgo8OTE4ODI4NDk5N2Y0MGJjODUwYmZhNDg2NzEyNjdhNWY+IF0gPj4Kc3RhcnR4cmVmCjEyMDA3CiUlRU9GCg==
+                copies:
+                  type: number
+                  example: 1
+                  minimum: 1
+                  maximum: 100
+                  description: Number of copies.
+              required:
+                - mime-type
+                - image
+            examples:
+              example:
+                value:
+                  mime-type: application/pdf
+                  image: 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81wwMDAxXDAwMDBcMDAwLlwwMDAxXDAwMDVcMDAwLlwwMDA3/1wwMTAw0zDrMMlcMDAwMVwwMDA5XDAwMEhcMDAwNVwwMDAyXDAwMDT/XDAxMVwwMDAgXDAwMFFcMDAwdVwwMDBhXDAwMHJcMDAwdFwwMDB6XDAwMCBcMDAwUFwwMDBEXDAwMEZcMDAwQ1wwMDBvXDAwMG5cMDAwdFwwMDBlXDAwMHhcMDAwdCkKL0F1dGhvciAoZXBzb24pIC9DcmVhdG9yICj+/zDGMK0wuTDIMKgwxzCjMMMwyCkgL0NyZWF0aW9uRGF0ZSAoRDoyMDIxMDcyOTA4MDU1N1owMCcwMCcpCi9Nb2REYXRlIChEOjIwMjEwNzI5MDgwNTU3WjAwJzAwJykgPj4KZW5kb2JqCnhyZWYKMCAyMAowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMTE2MTIgMDAwMDAgbiAKMDAwMDAwMDI5MiAwMDAwMCBuIAowMDAwMDA2OTU3IDAwMDAwIG4gCjAwMDAwMDAwMjIgMDAwMDAgbiAKMDAwMDAwMDI3MyAwMDAwMCBuIAowMDAwMDAwNDAxIDAwMDAwIG4gCjAwMDAwMDY5MjEgMDAwMDAgbiAKMDAwMDAwNDE0OSAwMDAwMCBuIAowMDAwMDA3MDk1IDAwMDAwIG4gCjAwMDAwMDA1NTAgMDAwMDAgbiAKMDAwMDAwMDYwMyAwMDAwMCBuIAowMDAwMDAwNjU3IDAwMDAwIG4gCjAwMDAwMDQxMjggMDAwMDAgbiAKMDAwMDAwNDE4NSAwMDAwMCBuIAowMDAwMDA2OTAwIDAwMDAwIG4gCjAwMDAwMDcwNDUgMDAwMDAgbiAKMDAwMDAwNzM0MCAwMDAwMCBuIAowMDAwMDA3NTkwIDAwMDAwIG4gCjAwMDAwMTE1OTEgMDAwMDAgbiAKdHJhaWxlcgo8PCAvU2l6ZSAyMCAvUm9vdCAxNiAwIFIgL0luZm8gMSAwIFIgL0lEIFsgPDkxODgyODQ5OTdmNDBiYzg1MGJmYTQ4NjcxMjY3YTVmPgo8OTE4ODI4NDk5N2Y0MGJjODUwYmZhNDg2NzEyNjdhNWY+IF0gPj4Kc3RhcnR4cmVmCjEyMDA3CiUlRU9GCg==
+                  copies: 1
+        description: ''
+  '/api/v1/printers/{queueName}/printer/capability':
+    parameters:
+      - schema:
+          type: string
+        name: queueName
+        in: path
+        required: true
+        description: Printer queue name.
+    get:
+      summary: Printer capability
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrinterCapability'
+              examples:
+                example-1:
+                  value:
+                    - capabilitytype: array
+                      current: internal_roll
+                      name: paperSource
+                      type: string
+                      values:
+                        - internal_roll
+                        - rear_feed_fanfold
+                        - rear_feed_roll
+                    - capabilitytype: array
+                      current: continuous_paper_no_detection
+                      name: paperForm
+                      type: string
+                      values:
+                        - diecut_label_gap_detection
+                        - diecut_label_blackmark_detection
+                        - continuous_label_blackmark_detection
+                        - continuous_label_no_detection
+                        - continuous_paper_blackmark_detection
+                        - continuous_paper_no_detection
+                        - wristband_blackmark_detection
+                    - capabilitytype: range
+                      current: 2
+                      max: 6
+                      min: 2
+                      name: formGap
+                      step: 0.1
+                      type: num
+                    - capabilitytype: range
+                      current: -10.8
+                      max: 10.8
+                      min: -10.8
+                      name: cutPosition
+                      step: 0.1
+                      type: num
+                    - capabilitytype: range
+                      current: -1
+                      max: 1.5
+                      min: -1.5
+                      name: printPositionH
+                      step: 0.1
+                      type: num
+                    - capabilitytype: range
+                      current: -10.9
+                      max: 10.9
+                      min: -10.9
+                      name: printPositionV
+                      step: 0.1
+                      type: num
+      operationId: get-api-v1-printers-queueName-printer-capability
+      description: Retrieve the specified printer capability.
+  '/api/v1/printers/{queueName}/printer/setting':
+    parameters:
+      - schema:
+          type: string
+        name: queueName
+        in: path
+        required: true
+        description: Printer queue name.
+    post:
+      summary: Printer device setting
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrinterCapability'
+              examples:
+                example-1:
+                  value:
+                    - capabilitytype: array
+                      current: internal_roll
+                      name: paperSource
+                      type: string
+                      values:
+                        - internal_roll
+                        - rear_feed_fanfold
+                        - rear_feed_roll
+                    - capabilitytype: array
+                      current: continuous_paper_no_detection
+                      name: paperForm
+                      type: string
+                      values:
+                        - diecut_label_gap_detection
+                        - diecut_label_blackmark_detection
+                        - continuous_label_blackmark_detection
+                        - continuous_label_no_detection
+                        - continuous_paper_blackmark_detection
+                        - continuous_paper_no_detection
+                        - wristband_blackmark_detection 
+                    - capabilitytype: range
+                      current: 2
+                      max: 6
+                      min: 2
+                      name: formGap
+                      step: 0.1
+                      type: num
+                    - capabilitytype: range
+                      current: -10.8
+                      max: 10.8
+                      min: -10.8
+                      name: cutPosition
+                      step: 0.1
+                      type: num
+                    - capabilitytype: range
+                      current: -1
+                      max: 1.5
+                      min: -1.5
+                      name: printPositionH
+                      step: 0.1
+                      type: num
+                    - capabilitytype: range
+                      current: -10.9
+                      max: 10.9
+                      min: -10.9
+                      name: printPositionV
+                      step: 0.1
+                      type: num
+      operationId: post-api-v1-printers-queueName-setting
+      description: Send printer device setting.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrinterSetting'
+            examples:
+              example-1:
+                value:
+                  paperSource: internal_roll
+                  paperForm: continuous_paper_no_detection
+                  formGap: 2
+                  cutPosition: -10.8
+                  printPositionH: -1
+                  printPositionV: -10.9
+  '/api/v1/printers/{queueName}/printer/status':
+    parameters:
+      - schema:
+          type: string
+        name: queueName
+        in: path
+        required: true
+        description: Printer queue name.
+    get:
+      summary: Printer status
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrinterStatus'
+              examples:
+                example-1:
+                  value:
+                    destination: Epson FooBarQueue
+                    status: 41
+                    statusDescription: Status_IL_PAPF_Ix1
+                    statusGroup: 5
+                    statusGroupDescription: Warning
+      operationId: get-api-v1-printers-queueName-info
+      description: Retrieve the specified printer's dynamic information.
+  '/api/v1/printers/{queueName}/printer/info':
+    parameters:
+      - schema:
+          type: string
+        name: queueName
+        in: path
+        required: true
+        description: Printer queue name.
+    get:
+      summary: Printer static info
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrinterInfo'
+              examples:
+                example-1:
+                  value:
+                    destination: Epson FooBarQueue
+                    deviceID: 'MFG:EPSON;MDL:CW-C4020;DES:EPSON CW-C4020;'
+                    inkNameC: SJIC43P-C
+                    inkNameK: SJIC43P-MK
+                    inkNameMN: SJMB4000
+                    inkNameY: SJIC43P-Y
+      operationId: get-api-v1-printers-queueName
+      description: Retrieve the specified printer's static information.
+  '/api/v1/printers/{queueName}/printer/sendcommand':
+    post:
+      summary: Send command
+      operationId: post-api-v1-sendcommand
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+                description: Command response from printer in base64 encoded string.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendCommand'
+            examples:
+              example-1:
+                value:
+                  command: string
+                  requiresResponse: true
+        description: ''
+      description: This sends any ESC/Label commands to printer and receives responses if needed.
+    parameters:
+      - schema:
+          type: string
+        name: queueName
+        in: path
+        required: true
+        description: Printer queue name.
+components:
+  schemas:
+    PrinterList:
+      title: PrinterList
+      type: array
+      items:
+        type: string
+      examples:
+        - - Epson FoobarQueue
+      description: Printer queue names' list.
+    PrintCapability:
+      title: PrintCapability
+      type: array
+      description: Capability for print setting.
+      examples:
+        - - name: MediaSaving
+            type: string
+            capabilitytype: array
+            current: NoSaving
+            values:
+              - NoSaving
+              - SaveBottom
+              - SaveTopBottom
+          - name: Collate
+            type: boolean
+            capabilitytype: boolean
+            current: true
+          - name: CutInterval
+            type: num
+            capabilitytype: range
+            current: '1'
+            max: 100
+            min: 1
+            step: 1
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+            example: MediaSaving
+            description: Capability name.
+          type:
+            type: string
+            example: string
+            description: 'Current value type. It takes ''string'', ''num'', ''boolean'' or ''pagesize''.'
+          capabilitytype:
+            type: string
+            example: array
+            description: 'Capability type. It takes ''array'', ''range'' or ''boolean''.'
+          current:
+            type:
+              - string
+              - number
+              - boolean
+              - object
+            example: PlainPaper
+            description: Currently set value. Its type is specified in 'type' key.
+            properties:
+              customWidth:
+                type: number
+                description: Custom page width (mm). It is available only when the 'type' is 'pagesize' and 'values' contains 'Custom.WIDTHxHEIGHT'.
+              customHeight:
+                type: number
+                description: Custom page height (mm). It is available only when the 'type' is 'pagesize' and 'values' contains 'Custom.WIDTHxHEIGHT'.
+          values:
+            type: array
+            description: Selectable values. This key is contained only when 'capabilitytype' is 'array'.
+            items:
+              type: string
+          max:
+            type: number
+            description: Max value. This key is contained only when 'capabilitytype' is 'range' and 'type' is 'num'.
+          min:
+            type: number
+            description: Min value. This key is contained only when 'capabilitytype' is 'range' and 'type' is 'num'.
+          step:
+            type: number
+            description: Step value. This key is contained only when 'capabilitytype' is 'range' and 'type' is 'num'.
+        required:
+          - name
+          - type
+          - capabilitytype
+          - current
+    PrintSetting:
+      description: Print setting.
+      type: object
+      x-examples:
+        example-1:
+          PageSize: 108x152.4mm
+          MediaSaving: NoSaving
+          MediaType: PlainPaper
+          Collate: true
+          ActionMode: PeelerManualMode
+          CutInterval: 1
+          PrintQuality: Normal
+          Pause: None
+          ColorAdjustment: High
+          InkProfile: 0
+          Brightness: 0
+          Contrast: 0
+          Saturation: 0
+          Cyan: 0
+          Magenta: 0
+          Yellow: 0
+          BiDirection: true
+          BlackRatio: 0
+          DryingTime: 0
+      examples:
+        - PageSize:
+            CustomWidth: 100
+            CustomHeight: 100
+          MediaSaving: NoSaving
+          MediaType: PlainPaper
+          Collate: true
+          ActionMode: PeelerManualMode
+          CutInterval: 0
+          PrintQuality: Normal
+          Pause: None
+          ColorAdjustment: High
+          InkProfile: 0
+          Brightness: 0
+          Contrast: 0
+          Saturation: 0
+          Cyan: 0
+          Magenta: 0
+          Yellow: 0
+          BiDirection: 'On'
+          BlackRatio: 0
+          DryingTime: 0
+      properties:
+        PageSize:
+          type:
+            - string
+            - object
+          minLength: 1
+          example: 108x152.4mm
+          properties:
+            customWidth:
+              type: number
+            customHeight:
+              type: number
+        MediaSaving:
+          type: string
+          minLength: 1
+          example: NoSaving
+        MediaType:
+          type: string
+          minLength: 1
+          example: PlainPaper
+        Collate:
+          type: boolean
+        ActionMode:
+          type: string
+          minLength: 1
+          example: PeelerManualMode
+        CutInterval:
+          type: number
+        PrintQuality:
+          type: string
+          minLength: 1
+          example: Normal
+        Pause:
+          type: string
+          minLength: 1
+          example: None
+        ColorAdjustment:
+          type: string
+          minLength: 1
+          example: High
+        InkProfile:
+          type: number
+        Brightness:
+          type: number
+        Contrast:
+          type: number
+        Saturation:
+          type: number
+        Cyan:
+          type: number
+        Magenta:
+          type: number
+        Yellow:
+          type: number
+        BiDirection:
+          type: string
+          example: 'On'
+        BlackRatio:
+          type: number
+        DryingTime:
+          type: number
+        EdgeCorrection:
+           type: string
+           example: 'Off'
+        ShrinkCorrection:
+           type: number
+        PrintingSpeed:
+           type: number
+        HeadMaintenance:
+            type: string
+            example: Pause
+        BandingReduction:
+            type: number
+    PrinterCapability:
+      title: PrinterCapability
+      type: array
+      description: Capability for printer.
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+            example: MediaSaving
+            description: Capability name.
+          type:
+            type: string
+            example: string
+            description: 'Current value type. It takes ''string'', ''num'' or ''boolean''.'
+          capabilitytype:
+            type: string
+            example: array
+            description: 'Capability type. It takes ''array'', ''range'' or ''boolean''.'
+          current:
+            type:
+              - string
+              - number
+              - boolean
+            example: PlainPaper
+            description: Currently set value. Its type is specified in 'type' key.
+          values:
+            type: array
+            description: Selectable values. This key is contained only when 'capabilitytype' is 'array'.
+            items:
+              type: string
+          max:
+            type: number
+            description: Max value. This key is contained only when 'capabilitytype' is 'range' and 'type' is 'num'.
+          min:
+            type: number
+            description: Min value. This key is contained only when 'capabilitytype' is 'range' and 'type' is 'num'.
+          step:
+            type: number
+            description: Step value. This key is contained only when 'capabilitytype' is 'range' and 'type' is 'num'.
+        required:
+          - name
+          - type
+          - capabilitytype
+          - current
+      examples:
+        - - capabilitytype: array
+            current: internal_roll
+            name: paperSource
+            type: string
+            values:
+              - internal_roll
+              - rear_feed_fanfold
+              - rear_feed_roll
+          - capabilitytype: array
+            current: continuous_paper_no_detection
+            name: paperForm
+            type: string
+            values:
+              - diecut_label_gap_detection
+              - diecut_label_blackmark_detection
+              - continuous_label_blackmark_detection
+              - continuous_label_no_detection
+              - continuous_paper_blackmark_detection
+              - continuous_paper_no_detection
+              - wristband_blackmark_detection
+          - capabilitytype: range
+            current: 2
+            max: 6
+            min: 2
+            name: formGap
+            step: 0.1
+            type: num
+          - capabilitytype: range
+            current: -10.8
+            max: 10.8
+            min: -10.8
+            name: cutPosition
+            step: 0.1
+            type: num
+          - capabilitytype: range
+            current: -1
+            max: 1.5
+            min: -1.5
+            name: printPositionH
+            step: 0.1
+            type: num
+          - capabilitytype: range
+            current: -10.9
+            max: 10.9
+            min: -10.9
+            name: printPositionV
+            step: 0.1
+            type: num
+          - capabilitytype: range
+            current: 0
+            max: 6.0
+            min: 0
+            name: sideMargin
+            step: 0.1
+            type: num
+    PrinterSetting:
+      title: PrinterSetting
+      type: object
+      description: Printer setting.
+      properties:
+        paperSource:
+          type: string
+          example: internal_roll
+        paperForm:
+          type: string
+          example: continuous_paper_no_detection
+        formGap:
+          type: number
+          example: 2
+        cutPosition:
+          type: number
+          example: -10.8
+        printPositionH:
+          type: number
+          example: -1
+        printPositionV:
+          type: number
+          example: -10.9
+        sideMargin:
+           type: number 
+           exapmle: 0
+        peelPositionA:
+           type: number 
+           example: 0.1
+        peelPositionB:
+           type: number 
+           example: 0.1
+        rightMargin:
+           type: number 
+           example : 20
+        incomplete_labelTreatment:
+           type: string 
+           example : Y
+        edgeHole:
+           type: number 
+           example : 28.4
+        head_mediaClearanceHeight:
+           type: number 
+           example : 2          
+      examples:
+        - paperSource: internal_roll
+          paperForm: continuous_paper_no_detection
+          formGap: 2
+          cutPosition: -10.8
+          printPositionH: -1
+          printPositionV: -10.9
+    PrinterStatus:
+      title: PrinterStatus
+      type: object
+      description: Printer's current status.
+      properties:
+        destination:
+          type: string
+          example: Epson FooBarQueue
+        status:
+          type: integer
+          example: 41
+        statusDescription:
+          type: string
+          example: Status_IL_PAPF_Ix1
+        statusGroup:
+          type: integer
+          example: 5
+        statusGroupDescription:
+          type: string
+          example: Warning
+      required:
+        - destination
+        - status
+        - statusDescription
+        - statusGroup
+        - statusGroupDescription
+      examples:
+        - destination: Epson FooBarQueue
+          status: 41
+          statusDescription: Status_IL_PAPF_Ix1
+          statusGroup: 5
+          statusGroupDescription: Warning
+    PrinterInfo:
+      title: PrinterInfo
+      type: object
+      description: Printer's static information.
+      properties:
+        destination:
+          type: string
+          example: Epson FooBarQueue
+        deviceID:
+          type: string
+          example: 'MFG:EPSON;MDL:CW-C4020;DES:EPSON CW-C4020;'
+        inkNameC:
+          type: string
+          example: SJIC43P-C
+        inkNameK:
+          type: string
+          example: SJIC43P-MK
+        inkNameMN:
+          type: string
+          example: SJMB4000
+        inkNameY:
+          type: string
+          example: SJIC43P-Y
+      required:
+        - destination
+        - deviceID
+        - inkNameC
+        - inkNameK
+        - inkNameMN
+        - inkNameY
+      examples:
+        - destination: Epson FooBarQueue
+          deviceID: 'MFG:EPSON;MDL:CW-C4020;DES:EPSON CW-C4020;'
+          inkNameC: SJIC43P-C
+          inkNameK: SJIC43P-MK
+          inkNameMN: SJMB4000
+          inkNameY: SJIC43P-Y
+    PrintJob:
+      title: PrintJob
+      type: object
+      description: Job information.
+      examples:
+        - res:
+            - request id is TestQueue-1 (1 file(s))
+      properties:
+        res:
+          type: array
+          description: Queued result strings that include the job ID.
+          items:
+            type: string
+            example: request id is TestQueue-1 (1 file(s))
+      required:
+        - res
+    SendCommand:
+      title: SendCommand
+      x-stoplight:
+        id: f247svynl78yh
+      type: object
+      properties:
+        command:
+          type: string
+          description: ESC/Label command in base64 encoded string.
+        requiresResponse:
+          type: boolean
+          description: Indicates whether the response data has to be received or not.
+      required:
+        - command

@@ -1,0 +1,22 @@
+{
+    "option_combinations" : {
+        "paperSource": ["paperSource", "paperShape"],
+        "paperForm": ["paperForm", "formDetectionType"]
+    },
+    "command_combinations": {
+        "paperSource": {
+            "internal_roll": {"paperSource": "IR", "paperShape": "RP"},
+            "rear_feed_fanfold": {"paperSource": "ER", "paperShape": "FP"},
+            "rear_feed_roll": {"paperSource": "ER", "paperShape": "RP"}
+        },
+        "paperForm": {
+            "diecut_label_gap_detection": {"paperForm": "DL", "formDetectionType": "W"},
+            "diecut_label_blackmark_detection": {"paperForm": "DL", "formDetectionType": "M"},
+            "continuous_label_blackmark_detection": {"paperForm": "CL", "formDetectionType": "M"},
+            "continuous_label_no_detection": {"paperForm": "CL", "formDetectionType": "N"},
+            "continuous_paper_blackmark_detection": {"paperForm": "CP", "formDetectionType": "M"},
+            "continuous_paper_no_detection": {"paperForm": "CP", "formDetectionType": "N"},
+            "tag_hole_detection": {"paperForm": "TG", "formDetectionType": "H"}
+        }
+    }
+}

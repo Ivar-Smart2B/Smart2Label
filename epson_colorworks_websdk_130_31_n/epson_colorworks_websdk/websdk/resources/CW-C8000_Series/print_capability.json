@@ -1,0 +1,12 @@
+{
+    "PageSize": {
+        "customwidth": {
+            "max": 112.0,
+            "min": 21.4
+        },
+        "customheight": {
+            "max": 1016.0,
+            "min": 8.0
+        }
+    }
+}

@@ -1,0 +1,17 @@
+{
+    "option_combinations" : {
+        "paperSource": ["paperSource"],
+        "paperForm": ["formDetectionType"]
+    },
+    "command_combinations": {
+        "paperSource": {
+            "roll": {"paperSource": "IR"},
+            "fanfold": {"paperSource": "ER"}
+        },
+        "paperForm": {
+            "gap_detection": {"formDetectionType": "W"},
+            "blackmark_detection": {"formDetectionType": "M"},
+            "no_detection": {"formDetectionType": "N"}
+        }
+    }
+}

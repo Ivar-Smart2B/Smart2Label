@@ -1,0 +1,20 @@
+{
+    "PageSize": {
+        "customwidth": {
+            "max": 108.0,
+            "min": {
+                "Diecut_Gap": 21.4,
+                "Diecut_Blackmark": 21.4,
+                "Contlabel_Blackmark": 21.4,
+                "Contlabel_no_detection": 21.4,
+                "Contpaper_Blackmark": 25.4,
+                "Contpaper_no_detection": 25.4,
+                "WristBand_Blackmark": 25.4
+            }
+        },
+        "customheight": {
+            "max": 406.4,
+            "min": 8.0
+        }
+    }
+}

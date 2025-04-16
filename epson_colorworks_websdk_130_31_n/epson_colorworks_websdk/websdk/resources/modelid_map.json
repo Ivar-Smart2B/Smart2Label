@@ -1,0 +1,57 @@
+{
+    "CW-C4000_Series": [
+        "CW-C4000u",
+        "CW-C4000e",
+        "CW-C4010",
+        "CW-C4020",
+        "CW-C4030",
+        "CW-C4040",
+        "CW-C4050"
+    ],
+    "CW-C6000A_C6500A_Series": [
+        "CW-C6000Ae",
+        "CW-C6000Au",
+        "CW-C6010A",
+        "CW-C6020A",
+        "CW-C6030A",
+        "CW-C6040A",
+        "CW-C6050A",
+        "CW-C6500Ae",
+        "CW-C6500Au",
+        "CW-C6510A",
+        "CW-C6520A",
+        "CW-C6530A",
+        "CW-C6540A",
+        "CW-C6550A",
+        "CW-D6500Ae",
+        "CW-D6000Ae"
+    ],
+    "CW-C6000P_C6500P_Series": [
+        "CW-C6000Pe",
+        "CW-C6000Pu",
+        "CW-C6010P",
+        "CW-C6020P",
+        "CW-C6030P",
+        "CW-C6040P",
+        "CW-C6050P",
+        "CW-C6500Pe",
+        "CW-C6500Pu",
+        "CW-C6510P",
+        "CW-C6520P",
+        "CW-C6530P",
+        "CW-C6540P",
+        "CW-C6550P",
+        "CW-D6500Pe",
+        "CW-D6000Pe"
+    ],
+    "CW-C8000_Series": [
+        "CW-C8000u",
+        "CW-C8000e",
+        "CW-C8010",
+        "CW-C8020",
+        "CW-C8030",
+        "CW-C8040",
+        "CW-C8050"
+    ]
+
+}
